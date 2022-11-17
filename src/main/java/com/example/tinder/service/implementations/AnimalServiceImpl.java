@@ -5,6 +5,7 @@ import com.example.tinder.model.entities.Breed;
 import com.example.tinder.model.entities.Species;
 import com.example.tinder.repository.AnimalRepository;
 import com.example.tinder.service.interfaces.AnimalService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,12 @@ import java.util.function.Predicate;
 public class AnimalServiceImpl implements AnimalService {
     AnimalRepository animalRepository;
 
-    List<Animal> getAll () {
+    @Autowired
+    public AnimalServiceImpl(AnimalRepository animalRepository) {
+        this.animalRepository = animalRepository;
+    }
+
+    public List<Animal> getAll () {
         return animalRepository.findAll();
     }
 
