@@ -1,6 +1,8 @@
 package com.example.tinder.service.implementations;
 
+import com.example.tinder.model.entities.Address;
 import com.example.tinder.model.entities.User;
+import com.example.tinder.repository.AddressRepository;
 import com.example.tinder.repository.UserRepository;
 import com.example.tinder.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
+    AddressRepository addressRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -24,5 +27,17 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> getById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public void addUser(Long id, String username, String password, String phone, String email, String street, String city, String country, String county) {
+        Address newAdress = new Address(street, city, country, county);
+
+        User newUser = new User(username, password, phone, email, newAdress);
+
+        if (!(userRepository.findById(id).isPresent())) {
+            newUser.setId(id);
+            userRepository.save(newUser);
+        }
     }
 }

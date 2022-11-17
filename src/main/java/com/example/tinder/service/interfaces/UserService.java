@@ -9,4 +9,6 @@ public interface UserService {
     List<User> getAll();
 
     Optional<User> getById(Long id);
+
+    void addUser(Long id, String username, String password, String phone, String email, String street, String city, String country, String county);
 }
