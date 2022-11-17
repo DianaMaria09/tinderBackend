@@ -1,6 +1,7 @@
 package com.example.tinder.model.entities;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Animal {
     @Id
@@ -29,4 +31,8 @@ public class Animal {
     @JoinColumn(name = "breed")
     Breed breed;
     Boolean selected;
+
+    public Animal() {
+
+    }
 }

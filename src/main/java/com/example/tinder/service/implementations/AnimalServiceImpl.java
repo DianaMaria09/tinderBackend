@@ -10,6 +10,7 @@ import com.example.tinder.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -83,5 +84,22 @@ public class AnimalServiceImpl implements AnimalService {
         var allAnimalsBySpecies = getAllBySpecies(animal.getSpecies());
 
         return (List<Animal>) allAnimalsBySpecies.stream().filter(areNotInPreviousMatch);
+    }
+
+    @Override
+    public void addAnimal(Long id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed) {
+        Animal newAnimal = new Animal(id, name, birthday, gender, user, species, breed, true);
+
+        var allAnimalsOfUser = getAllByUser(user);
+        for (var animal : allAnimalsOfUser) {
+            animal.setSelected(false);
+        }
+
+        allAnimalsOfUser.add(newAnimal);
+        animalRepository.saveAll(allAnimalsOfUser);
+    }
+
+    public void deleteAnimal(Long id) {
+        animalRepository.deleteById(id);
     }
 }

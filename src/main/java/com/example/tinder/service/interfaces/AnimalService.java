@@ -5,6 +5,10 @@ import com.example.tinder.model.entities.Breed;
 import com.example.tinder.model.entities.Species;
 import com.example.tinder.model.entities.User;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AnimalService {
@@ -23,4 +27,6 @@ public interface AnimalService {
      */
     List<Animal> getAllToDisplayForAnimal(Animal animal);
 
+    void addAnimal(Long id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed);
+    void deleteAnimal(Long id);
 }
