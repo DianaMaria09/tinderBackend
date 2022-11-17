@@ -3,6 +3,7 @@ package com.example.tinder.service.implementations;
 import com.example.tinder.model.entities.Animal;
 import com.example.tinder.model.entities.Breed;
 import com.example.tinder.model.entities.Species;
+import com.example.tinder.model.entities.User;
 import com.example.tinder.repository.AnimalRepository;
 import com.example.tinder.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +25,39 @@ public class AnimalServiceImpl implements AnimalService {
         return animalRepository.findAll();
     }
 
-    List<Animal> getAllByBreed (Breed breed) {
+    public List<Animal> getAllByBreed(Breed breed) {
 
         Predicate<Animal> isOfBreed = animal -> animal.getBreed() == breed;
 
         return (List<Animal>) animalRepository.findAll().stream().filter(isOfBreed);
     }
 
-    List<Animal> getAllBySpecies (Species species) {
+    public List<Animal> getAllBySpecies (Species species) {
 
         Predicate<Animal> isOfSpecies = animal -> animal.getSpecies() == species;
 
         return (List<Animal>) animalRepository.findAll().stream().filter(isOfSpecies);
     }
 
-    List<Animal> getAllByBreedAndSpecies (Breed breed, Species species) {
+    public List<Animal> getAllByBreedAndSpecies (Breed breed, Species species) {
         Predicate<Animal> isOfBreed = animal -> animal.getBreed() == breed;
         Predicate<Animal> isOfSpecies = animal -> animal.getSpecies() == species;
 
         Predicate<Animal> filterByAll = isOfBreed.and(isOfSpecies);
 
         return (List<Animal>) animalRepository.findAll().stream().filter(filterByAll);
+    }
+
+    public List<Animal> getAllByUser (User user) {
+        Predicate<Animal> isOfUser = animal -> animal.getUser() == user;
+
+        return (List<Animal>) animalRepository.findAll().stream().filter(isOfUser);
+    }
+
+    @Override
+    public Animal getSelectedAnimalOfUser(User user) {
+        Predicate<Animal> isSelected = animal -> animal.getSelected() == Boolean.TRUE;
+
+        return (Animal) getAllByUser(user).stream().filter(isSelected);
     }
 }

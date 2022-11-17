@@ -1,5 +1,9 @@
 package com.example.tinder.service.interfaces;
 
-public interface ChatService {
+import com.example.tinder.model.entities.Chat;
 
+import java.util.List;
+
+public interface ChatService {
+    List<Chat> getAll();
 }

@@ -17,7 +17,7 @@ public class SpeciesServiceImpl implements SpeciesService {
         this.speciesRepository = speciesRepository;
     }
 
-    List<Species> getAll() {
+    public List<Species> getAll() {
         return speciesRepository.findAll();
     }
 }

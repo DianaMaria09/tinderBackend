@@ -18,7 +18,7 @@ public class ChatServiceImpl implements ChatService {
         this.chatRepository = chatRepository;
     }
 
-    List<Chat> getAll() {
+    public List<Chat> getAll() {
         return chatRepository.findAll();
     }
 }

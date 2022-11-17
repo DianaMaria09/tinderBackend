@@ -17,7 +17,7 @@ public class MessageServiceImpl implements MessageService {
         this.messageRepository = messageRepository;
     }
 
-    List<Message> getAll() {
+    public List<Message> getAll() {
         return messageRepository.findAll();
     }
 }

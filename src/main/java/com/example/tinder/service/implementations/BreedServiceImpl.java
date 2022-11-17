@@ -18,7 +18,7 @@ public class BreedServiceImpl implements BreedService {
         this.breedRepository = breedRepository;
     }
 
-    List<Breed> getAll () {
+    public List<Breed> getAll() {
         return breedRepository.findAll();
     }
 }

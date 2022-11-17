@@ -18,7 +18,7 @@ public class MatchServiceImpl implements MatchService {
         this.matchRepository = matchRepository;
     }
 
-    List<Match> getAll(){
+    public List<Match> getAll(){
         return matchRepository.findAll();
     }
 }

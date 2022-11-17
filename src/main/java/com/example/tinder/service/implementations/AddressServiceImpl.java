@@ -18,7 +18,7 @@ public class AddressServiceImpl implements AddressService {
         this.addressRepository = addressRepository;
     }
 
-    List<Address> getAll() {
+    public List<Address> getAll() {
         return addressRepository.findAll();
     }
 
