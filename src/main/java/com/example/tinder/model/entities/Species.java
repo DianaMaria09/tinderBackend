@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 @Data
 public class Species {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     String name;
     String characteristics;

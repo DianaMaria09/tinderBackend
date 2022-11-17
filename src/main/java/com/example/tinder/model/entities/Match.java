@@ -1,13 +1,17 @@
 package com.example.tinder.model.entities;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Match {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_animal1")
@@ -15,5 +19,6 @@ public class Match {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_animal2")
     Animal animal2;
-    Boolean likeValidation;
+    Boolean likeAnimal1;
+    Boolean likeAnimal2;
 }
