@@ -16,4 +16,11 @@ public interface AnimalService {
     List<Animal> getAllByUser(User user);
     Animal getSelectedAnimalOfUser(User user);
 
+    /**
+     * Function to call when you want all of the possible matches you can show to a
+     * certain Animal (no previous match)
+     * @return List<Animal>
+     */
+    List<Animal> getAllToDisplayForAnimal(Animal animal);
+
 }

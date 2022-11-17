@@ -5,6 +5,7 @@ import com.example.tinder.model.entities.Breed;
 import com.example.tinder.model.entities.Species;
 import com.example.tinder.model.entities.User;
 import com.example.tinder.repository.AnimalRepository;
+import com.example.tinder.repository.MatchRepository;
 import com.example.tinder.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.function.Predicate;
 @Service
 public class AnimalServiceImpl implements AnimalService {
     AnimalRepository animalRepository;
+    MatchRepository matchRepository;
 
     @Autowired
     public AnimalServiceImpl(AnimalRepository animalRepository) {
@@ -59,5 +61,27 @@ public class AnimalServiceImpl implements AnimalService {
         Predicate<Animal> isSelected = animal -> animal.getSelected() == Boolean.TRUE;
 
         return (Animal) getAllByUser(user).stream().filter(isSelected);
+    }
+
+    private boolean areAnimalsInAMatch(Animal animal1, Animal animal2) {
+        var allMatches = matchRepository.findAll();
+
+        for (var match : allMatches) {
+            if ((match.getAnimal1() == animal1 && match.getAnimal2() == animal2) ||
+                (match.getAnimal1() == animal2 && match.getAnimal2() == animal1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    @Override
+    public List<Animal> getAllToDisplayForAnimal(Animal animal) {
+
+        Predicate<Animal> areNotInPreviousMatch = animalPrev -> !areAnimalsInAMatch(animal, animalPrev);
+
+        var allAnimalsBySpecies = getAllBySpecies(animal.getSpecies());
+
+        return (List<Animal>) allAnimalsBySpecies.stream().filter(areNotInPreviousMatch);
     }
 }
