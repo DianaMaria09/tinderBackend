@@ -1,9 +1,12 @@
 package com.example.tinder.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 
@@ -21,7 +24,9 @@ public class Match {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_animal2")
     Animal animal2;
+    @Value("${likeAnimal1:#{null}}")
     Boolean likeAnimal1;
+    @Value("${likeAnimal2:#{null}}")
     Boolean likeAnimal2;
 
     public Match() {
