@@ -4,6 +4,7 @@ import com.example.tinder.model.entities.Address;
 import com.example.tinder.model.entities.User;
 import com.example.tinder.repository.AddressRepository;
 import com.example.tinder.repository.UserRepository;
+import com.example.tinder.repository.UserRepositoryCustom;
 import com.example.tinder.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
+    UserRepositoryCustom userRepositoryCustom;
     AddressRepository addressRepository;
 
     @Autowired
@@ -39,5 +41,10 @@ public class UserServiceImpl implements UserService {
             newUser.setId(id);
             userRepository.save(newUser);
         }
+    }
+
+    @Override
+    public User getByLogin(String username, String password) {
+        return userRepositoryCustom.findByLogin(username, password);
     }
 }

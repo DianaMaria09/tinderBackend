@@ -11,4 +11,6 @@ public interface UserService {
     Optional<User> getById(Long id);
 
     void addUser(Long id, String username, String password, String phone, String email, String street, String city, String country, String county);
+
+    User getByLogin(String username, String password);
 }
