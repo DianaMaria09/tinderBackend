@@ -64,12 +64,19 @@ public class AnimalServiceImpl implements AnimalService {
         return (Animal) getAllByUser(user).stream().filter(isSelected);
     }
 
+    /***
+     * check if animal1 already matched with animal2 (either liked or disliked animal2)
+     * @param animal1
+     * @param animal2
+     * @return true, if animal1 liked or disliked animal2,
+     *          false, if animal1 didn't interact with animal2 yet
+     */
     private boolean areAnimalsInAMatch(Animal animal1, Animal animal2) {
         var allMatches = matchRepository.findAll();
 
         for (var match : allMatches) {
             if ((match.getAnimal1() == animal1 && match.getAnimal2() == animal2) ||
-                (match.getAnimal1() == animal2 && match.getAnimal2() == animal1)) {
+                    (match.getAnimal1() == animal2 && match.getAnimal2() == animal1 && match.getLikeAnimal2() != null)) {
                 return true;
             }
         }

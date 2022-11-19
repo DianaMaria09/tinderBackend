@@ -46,7 +46,6 @@ public class MatchServiceImpl implements MatchService {
         } else {
             var newMatch = new Match(animalWhoLiked, animalLikedBy);
             newMatch.setLikeAnimal1(true);
-            newMatch.setLikeAnimal2(false);
             matchRepository.save(newMatch);
         }
     }
