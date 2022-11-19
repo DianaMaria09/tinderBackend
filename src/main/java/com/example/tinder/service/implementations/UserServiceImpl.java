@@ -5,8 +5,10 @@ import com.example.tinder.model.entities.User;
 import com.example.tinder.repository.AddressRepository;
 import com.example.tinder.repository.UserRepository;
 import com.example.tinder.repository.UserRepositoryCustom;
+import com.example.tinder.repository.implementations.UserRepositoryCustomImpl;
 import com.example.tinder.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,9 @@ public class UserServiceImpl implements UserService {
     AddressRepository addressRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, @Qualifier("userRepositoryCustomImpl") UserRepositoryCustom userRepositoryCustom) {
         this.userRepository = userRepository;
+        this.userRepositoryCustom = userRepositoryCustom;
     }
 
     public List<User> getAll() {

@@ -23,10 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -34,6 +31,7 @@ import javax.validation.Valid;
 @Log4j2
 @RestController
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@CrossOrigin
 public class AuthController {
     @Autowired
     UserService userService;
@@ -65,8 +63,8 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             User userDetails = (User) authentication.getPrincipal();
-
-            return ResponseEntity.ok().body(jwtUtils.generateTokenFromUsername(userDetails.getUsername()));
+            LoginResponse loginResponse = new LoginResponse(userDetails.getId(), jwtUtils.getUserNameFromJwtToken(userDetails.getUsername()));
+            return ResponseEntity.ok().body(loginResponse);
         }
     }
     @PostMapping("/logout")
