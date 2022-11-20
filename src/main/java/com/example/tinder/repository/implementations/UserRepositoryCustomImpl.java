@@ -7,6 +7,8 @@ import com.example.tinder.repository.UserRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -16,10 +18,18 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     @Lazy
     UserRepository userRepository;
     Properties databaseProperties = new Properties();
+
+    JdbcUtils jdbcUtils;
     @Autowired
     AddressRepository addressRepository;
 
     public Connection connect() throws SQLException {
+        try {
+            databaseProperties.load(new FileReader("src/main/resources/application.properties"));
+        } catch (IOException e) {
+
+        }
+        //jdbcUtils = new JdbcUtils(databaseProperties);
         return DriverManager.getConnection(databaseProperties.getProperty("spring.datasource.url"),
                 databaseProperties.getProperty("spring.datasource.username"), databaseProperties.getProperty("spring.datasource.password"));
     }

@@ -22,7 +22,7 @@ import java.util.Optional;
 @Controller
 @Log4j2
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class AnimalController {
     final AnimalService animalService;
     final UserService userService;

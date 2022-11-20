@@ -27,26 +27,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Import(SecurityConfig.class)
 @Log4j2
-@RestController
+@Controller
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class AuthController {
     @Autowired
     UserService userService;
     @Autowired
-    BeanFactory beanFactory;
-    @Autowired
     JwtUtils jwtUtils;
-    AuthenticationManager authenticationManager;
-
-    private AuthenticationManager getAuthenticationManager() {
-        if (this.authenticationManager == null) {
-            this.authenticationManager = beanFactory.getBean(BeanIds.AUTHENTICATION_MANAGER, AuthenticationManager.class);
-        }
-        return this.authenticationManager;
-    }
 
 
     @PostMapping(value = "/login")
@@ -56,20 +45,14 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username or password incorrect");
         }
         else {
-            authenticationManager = getAuthenticationManager();
-            Authentication authentication = authenticationManager
+            /*Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            User userDetails = (User) authentication.getPrincipal();
-            LoginResponse loginResponse = new LoginResponse(userDetails.getId(), jwtUtils.getUserNameFromJwtToken(userDetails.getUsername()));
-            return ResponseEntity.ok().body(loginResponse);
+            User userDetails = (User) authentication.getPrincipal();*/
+            LoginResponse loginResponse = new LoginResponse(user.getId(), jwtUtils.generateTokenFromUsername(user.getUsername()));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(loginResponse);
         }
-    }
-    @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser() {
-        return ResponseEntity.ok().header(HttpStatus.OK.name())
-                .body("Signed out!");
     }
 }
