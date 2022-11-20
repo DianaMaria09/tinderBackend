@@ -3,6 +3,8 @@ package com.example.tinder.controller;
 import com.example.tinder.model.entities.Animal;
 import com.example.tinder.model.entities.User;
 import com.example.tinder.service.interfaces.AnimalService;
+import com.example.tinder.service.interfaces.BreedService;
+import com.example.tinder.service.interfaces.SpeciesService;
 import com.example.tinder.service.interfaces.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -26,11 +28,15 @@ import java.util.Optional;
 public class AnimalController {
     final AnimalService animalService;
     final UserService userService;
-
+    final BreedService breedService;
+    final SpeciesService speciesService;
+    
     @Autowired
-    public AnimalController(AnimalService animalService, UserService userService) {
+    public AnimalController(AnimalService animalService, UserService userService, BreedService breedService, SpeciesService speciesService) {
         this.animalService = animalService;
         this.userService = userService;
+        this.breedService = breedService;
+        this.speciesService = speciesService;
     }
 
     @RequestMapping(value = "/animals/{userId}", method = RequestMethod.GET)
@@ -59,5 +65,17 @@ public class AnimalController {
                     .status(HttpStatus.NO_CONTENT)
                     .body("User does not exist");
         }
+    }
+    
+    @RequestMapping(value = "/animal/get_species", method = RequestMethod.GET)
+    public  ResponseEntity<?> getAnimalSpecies(){
+        log.info("AnimalController: get species");
+        return ResponseEntity.status(HttpStatus.OK).body(speciesService.getAll());
+    }
+    
+    @RequestMapping(value = "/animal/get_breeds", method = RequestMethod.GET)
+    public ResponseEntity<?> getAnimalBreeds(){
+        log.info("AnimalController: get breeds");
+        return ResponseEntity.status(HttpStatus.OK).body(breedService.getAll());
     }
 }
