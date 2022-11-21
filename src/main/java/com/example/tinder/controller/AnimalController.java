@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,5 +74,21 @@ public class AnimalController {
     public ResponseEntity<?> getAnimalBreeds(){
         log.info("AnimalController: get breeds");
         return ResponseEntity.status(HttpStatus.OK).body(breedService.getAll());
+    }
+
+    @RequestMapping(value = "/save_animal", method = RequestMethod.POST)
+    public Animal save(@RequestBody Animal animal)
+    {
+        log.info("AnimalController: save animal");
+        animal = animalService.addAnimal(Optional.empty(), animal.getName(), animal.getBirthday(), animal.getGender(), animal.getUser(), animal.getSpecies(), animal.getBreed());
+        return animal;
+    }
+
+    @RequestMapping(value = "/edit_animal/{id}", method = RequestMethod.PUT)
+    public Animal updateById(@RequestBody Animal animal)
+    {
+        log.info("AnimalController: edit animal");
+        animal = animalService.addAnimal(Optional.ofNullable(animal.getId()), animal.getName(), animal.getBirthday(), animal.getGender(), animal.getUser(), animal.getSpecies(), animal.getBreed());
+        return animal;
     }
 }

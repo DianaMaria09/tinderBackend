@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @Service
@@ -94,16 +95,20 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public void addAnimal(Long id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed) {
-        Animal newAnimal = new Animal(id, name, birthday, gender, user, species, breed, true);
-
+    public Animal addAnimal(Optional<Long> id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed) {
+        Animal newAnimal;
+        if(id.isPresent())
+        {
+            newAnimal = new Animal(id.get(), name,birthday,gender,user,species,breed,true);
+        }else {
+            newAnimal = new Animal(name, birthday, gender, user, species, breed, true);
+        }
         var allAnimalsOfUser = getAllByUser(user);
         for (var animal : allAnimalsOfUser) {
             animal.setSelected(false);
         }
-
-        allAnimalsOfUser.add(newAnimal);
         animalRepository.saveAll(allAnimalsOfUser);
+        return animalRepository.save(newAnimal);
     }
 
     public void deleteAnimal(Long id) {
