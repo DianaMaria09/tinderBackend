@@ -2,6 +2,7 @@ package com.example.tinder.controller;
 
 import com.example.tinder.model.entities.Animal;
 import com.example.tinder.model.entities.User;
+import com.example.tinder.model.frontObjects.AnimalData;
 import com.example.tinder.service.interfaces.AnimalService;
 import com.example.tinder.service.interfaces.BreedService;
 import com.example.tinder.service.interfaces.SpeciesService;
@@ -77,18 +78,24 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/save_animal", method = RequestMethod.POST)
-    public Animal save(@RequestBody Animal animal)
+    public Animal save(@RequestBody AnimalData animalData)
     {
         log.info("AnimalController: save animal");
-        animal = animalService.addAnimal(Optional.empty(), animal.getName(), animal.getBirthday(), animal.getGender(), animal.getUser(), animal.getSpecies(), animal.getBreed());
-        return animal;
+        if(userService.getById(animalData.getUserId()).isPresent()) {
+            return animalService.addAnimal(Optional.empty(), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+        }else {
+            return null;
+        }
     }
 
     @RequestMapping(value = "/edit_animal/{id}", method = RequestMethod.PUT)
-    public Animal updateById(@RequestBody Animal animal)
+    public Animal updateById(@RequestBody AnimalData animalData)
     {
         log.info("AnimalController: edit animal");
-        animal = animalService.addAnimal(Optional.ofNullable(animal.getId()), animal.getName(), animal.getBirthday(), animal.getGender(), animal.getUser(), animal.getSpecies(), animal.getBreed());
-        return animal;
+        if(userService.getById(animalData.getUserId()).isPresent()) {
+            return animalService.addAnimal(Optional.ofNullable(animalData.getId()), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+        }else {
+            return null;
+        }
     }
 }

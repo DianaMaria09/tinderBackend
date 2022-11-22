@@ -21,4 +21,9 @@ public class BreedServiceImpl implements BreedService {
     public List<Breed> getAll() {
         return breedRepository.findAll();
     }
+
+    @Override
+    public Breed getById(Long id) {
+        return breedRepository.getById(id);
+    }
 }

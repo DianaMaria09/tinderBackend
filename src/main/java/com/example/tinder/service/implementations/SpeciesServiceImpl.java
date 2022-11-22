@@ -20,4 +20,9 @@ public class SpeciesServiceImpl implements SpeciesService {
     public List<Species> getAll() {
         return speciesRepository.findAll();
     }
+
+    @Override
+    public Species getById(Long id) {
+        return speciesRepository.getById(id);
+    }
 }

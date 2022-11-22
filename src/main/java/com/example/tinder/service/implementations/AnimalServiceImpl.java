@@ -97,12 +97,7 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public Animal addAnimal(Optional<Long> id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed) {
         Animal newAnimal;
-        if(id.isPresent())
-        {
-            newAnimal = new Animal(id.get(), name,birthday,gender,user,species,breed,true);
-        }else {
-            newAnimal = new Animal(name, birthday, gender, user, species, breed, true);
-        }
+        newAnimal = id.map(aLong -> new Animal(aLong, name, birthday, gender, user, species, breed, true)).orElseGet(() -> new Animal(name, birthday, gender, user, species, breed, true));
         var allAnimalsOfUser = getAllByUser(user);
         for (var animal : allAnimalsOfUser) {
             animal.setSelected(false);
