@@ -9,4 +9,5 @@ import java.util.List;
 public interface MatchService {
     List<Match> getAll();
     void addMatch(Animal animal1, Animal animal2);
+    List<Match> getMatchForAnimal(Animal animal);
 }

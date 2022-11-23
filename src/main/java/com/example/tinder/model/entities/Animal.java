@@ -1,5 +1,6 @@
 package com.example.tinder.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,14 +8,16 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.ALWAYS)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Animal {
+public class Animal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
