@@ -46,15 +46,7 @@ public class AnimalController {
             List<Animal> animals = animalService.getAllByUser(user.get());
             List<AnimalData> response = new ArrayList<>();
             for (var animal : animals) {
-                var animalDto = new AnimalData();
-                animalDto.setId(animal.getId());
-                animalDto.setBirthday(animal.getBirthday());
-                animalDto.setGender(animal.getGender());
-                animalDto.setSpeciesId(animal.getSpecies().getId());
-                animalDto.setBreedId(animal.getBreed().getId());
-                animalDto.setSelected(animal.getSelected());
-                animalDto.setName(animal.getName());
-                animalDto.setUserId(animal.getUser().getId());
+                var animalDto = new AnimalData(animal);
                 response.add(animalDto);
             }
             return ResponseEntity.ok(response);
@@ -71,16 +63,7 @@ public class AnimalController {
         Optional<User> user = userService.getById(userId);
         if (user.isPresent()) {
             Animal animal = animalService.getSelectedAnimalOfUser(user.get());
-            var response = new AnimalData();
-            response.setId(animal.getId());
-            response.setBirthday(animal.getBirthday());
-            response.setGender(animal.getGender());
-            response.setName(animal.getName());
-            response.setSelected(animal.getSelected());
-            response.setUserId(animal.getUser().getId());
-            response.setBreedId(animal.getBreed().getId());
-            response.setSpeciesId(animal.getSpecies().getId());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok( new AnimalData(animal));
         } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -101,24 +84,38 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/save_animal", method = RequestMethod.POST)
-    public Animal save(@RequestBody AnimalData animalData)
+    public ResponseEntity<AnimalData> save(@RequestBody AnimalData animalData)
     {
         log.info("AnimalController: save animal");
         if(userService.getById(animalData.getUserId()).isPresent()) {
-            return animalService.addAnimal(Optional.empty(), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+            var animal = animalService.addAnimal(Optional.empty(), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+            return ResponseEntity.status(HttpStatus.OK).body(new AnimalData(animal));
         }else {
             return null;
         }
     }
 
     @RequestMapping(value = "/edit_animal/{id}", method = RequestMethod.PUT)
-    public Animal updateById(@RequestBody AnimalData animalData)
+    public ResponseEntity<AnimalData> updateById(@RequestBody AnimalData animalData)
     {
         log.info("AnimalController: edit animal");
         if(userService.getById(animalData.getUserId()).isPresent()) {
-            return animalService.addAnimal(Optional.ofNullable(animalData.getId()), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+            var animal =  animalService.addAnimal(Optional.ofNullable(animalData.getId()), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+            return ResponseEntity.status(HttpStatus.OK).body(new AnimalData(animal));
         }else {
             return null;
         }
+    }
+    
+    @RequestMapping(value = "/delete_animal/{userId}/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteById(@PathVariable Long userId, @PathVariable Long id){
+        var newSelectedAnimal = animalService.deleteAnimal(id, userService.getById(userId).get());
+        return ResponseEntity.status(HttpStatus.OK).body(new AnimalData(newSelectedAnimal));
+    }
+    
+    @RequestMapping(value="/select_animal/{userId}/{id}", method = RequestMethod.GET)
+    public  ResponseEntity<AnimalData> selectById(@PathVariable Long userId, @PathVariable Long id){
+        var selectedAnimal = animalService.selectAnimalForUserById(id,userService.getById((userId)).get());
+        return ResponseEntity.status(HttpStatus.OK).body(new AnimalData(selectedAnimal));
     }
 }

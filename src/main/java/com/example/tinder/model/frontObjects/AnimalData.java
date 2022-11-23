@@ -1,5 +1,6 @@
 package com.example.tinder.model.frontObjects;
 
+import com.example.tinder.model.entities.Animal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,17 @@ public class AnimalData {
     Long speciesId;
     Long breedId;
     Boolean selected;
+    
+    public AnimalData(){}
+    
+    public AnimalData (Animal animal){
+        id = animal.getId();
+        name = animal.getName();
+        birthday = animal.getBirthday();
+        gender = animal.getGender();
+        userId = animal.getUser().getId();
+        speciesId = animal.getSpecies().getId();
+        breedId = animal.getBreed().getId();
+        selected = animal.getSelected();
+    }
 }

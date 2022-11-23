@@ -106,8 +106,28 @@ public class AnimalServiceImpl implements AnimalService {
         animalRepository.saveAll(allAnimalsOfUser);
         return animalRepository.save(newAnimal);
     }
-
-    public void deleteAnimal(Long id) {
+    
+    public Animal selectAnimalForUserById(Long id, User user){
+        var allAnimalsOfUser = getAllByUser(user);
+        Animal retAnimal = null;
+        for(var animal: allAnimalsOfUser) {
+            if(animal.getId() == id){
+                animal.setSelected(true);
+                retAnimal = animal;
+            } else {
+                animal.setSelected(false);
+            }
+        }
+        animalRepository.saveAll(allAnimalsOfUser);
+        return retAnimal;
+    }
+    
+    public Animal deleteAnimal(Long id,User user) {
         animalRepository.deleteById(id);
+        var allAnimals = getAllByUser(user);
+        var animal = allAnimals.get(0);
+        animal.setSelected(true);
+        animalRepository.save(animal);
+        return animal;
     }
 }
