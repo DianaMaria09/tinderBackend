@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 public class AnimalServiceImpl implements AnimalService {
@@ -33,14 +34,14 @@ public class AnimalServiceImpl implements AnimalService {
 
         Predicate<Animal> isOfBreed = animal -> animal.getBreed() == breed;
 
-        return (List<Animal>) animalRepository.findAll().stream().filter(isOfBreed);
+        return animalRepository.findAll().stream().filter(isOfBreed).collect(Collectors.toList());
     }
 
     public List<Animal> getAllBySpecies (Species species) {
 
         Predicate<Animal> isOfSpecies = animal -> animal.getSpecies() == species;
 
-        return (List<Animal>) animalRepository.findAll().stream().filter(isOfSpecies);
+        return animalRepository.findAll().stream().filter(isOfSpecies).collect(Collectors.toList());
     }
 
     public List<Animal> getAllByBreedAndSpecies (Breed breed, Species species) {
@@ -55,14 +56,14 @@ public class AnimalServiceImpl implements AnimalService {
     public List<Animal> getAllByUser (User user) {
         Predicate<Animal> isOfUser = animal -> animal.getUser() == user;
 
-        return (List<Animal>) animalRepository.findAll().stream().filter(isOfUser);
+        return animalRepository.findAll().stream().filter(isOfUser).collect(Collectors.toList());
     }
 
     @Override
     public Animal getSelectedAnimalOfUser(User user) {
         Predicate<Animal> isSelected = animal -> animal.getSelected() == Boolean.TRUE;
 
-        return (Animal) getAllByUser(user).stream().filter(isSelected);
+        return getAllByUser(user).stream().filter(isSelected).collect(Collectors.toList()).get(0);
     }
 
     /***

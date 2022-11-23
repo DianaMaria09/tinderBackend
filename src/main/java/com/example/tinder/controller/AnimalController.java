@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,20 @@ public class AnimalController {
         log.info("AnimalController: list animals");
         Optional<User> user = userService.getById(userId);
         if (user.isPresent()) {
-            List<Animal> response = animalService.getAllByUser(user.get());
+            List<Animal> animals = animalService.getAllByUser(user.get());
+            List<AnimalData> response = new ArrayList<>();
+            for (var animal : animals) {
+                var animalDto = new AnimalData();
+                animalDto.setId(animal.getId());
+                animalDto.setBirthday(animal.getBirthday());
+                animalDto.setGender(animal.getGender());
+                animalDto.setSpeciesId(animal.getSpecies().getId());
+                animalDto.setBreedId(animal.getBreed().getId());
+                animalDto.setSelected(animal.getSelected());
+                animalDto.setName(animal.getName());
+                animalDto.setUserId(animal.getUser().getId());
+                response.add(animalDto);
+            }
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity
@@ -56,7 +70,16 @@ public class AnimalController {
         log.info("AnimalController: selected animal");
         Optional<User> user = userService.getById(userId);
         if (user.isPresent()) {
-            Animal response = animalService.getSelectedAnimalOfUser(user.get());
+            Animal animal = animalService.getSelectedAnimalOfUser(user.get());
+            var response = new AnimalData();
+            response.setId(animal.getId());
+            response.setBirthday(animal.getBirthday());
+            response.setGender(animal.getGender());
+            response.setName(animal.getName());
+            response.setSelected(animal.getSelected());
+            response.setUserId(animal.getUser().getId());
+            response.setBreedId(animal.getBreed().getId());
+            response.setSpeciesId(animal.getSpecies().getId());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity
