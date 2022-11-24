@@ -1,5 +1,6 @@
 package com.example.tinder.controller;
 
+import com.example.tinder.model.BearerTokenWrapper;
 import com.example.tinder.model.entities.Animal;
 import com.example.tinder.model.entities.Match;
 import com.example.tinder.model.frontObjects.AnimalData;
@@ -14,10 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @Log4j2
@@ -28,25 +31,29 @@ public class MatchController {
     final AnimalService animalService;
 
     @Autowired
+    BearerTokenWrapper tokenWrapper;
+
+    @Autowired
     public MatchController(MatchService matchService, AnimalService animalService) {
         this.matchService = matchService;
         this.animalService = animalService;
     }
 
     @RequestMapping(value = "/get_matches/{animal_id}")
-    public ResponseEntity<?> getMatchesForAnimal(@PathVariable Long animal_id){
+    public ResponseEntity<?> getMatchesForAnimal(@RequestHeader("Authorization") String bearerToken, @PathVariable Long animal_id) {
         log.info("MatchController: get matcher for animal with id: " + animal_id);
         Animal animal = animalService.findById(animal_id);
+        if (!Objects.equals(tokenWrapper.getUsername(bearerToken), animal.getUser().getUsername()))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error");
         List<Match> matches = matchService.getMatchForAnimal(animal);
         List<AnimalData> animalsFromMatches = new ArrayList<>();
-        for(Match match : matches){
-            if(match.getAnimal2() != animal){
+        for (Match match : matches) {
+            if (match.getAnimal2() != animal) {
                 animalsFromMatches.add(new AnimalData(match.getAnimal2()));
-            }
-            else if(match.getAnimal1() != animal){
+            } else if (match.getAnimal1() != animal) {
                 animalsFromMatches.add(new AnimalData(match.getAnimal1()));
             }
         }
-            return ResponseEntity.status(HttpStatus.OK).body(animalsFromMatches);
+        return ResponseEntity.status(HttpStatus.OK).body(animalsFromMatches);
     }
 }

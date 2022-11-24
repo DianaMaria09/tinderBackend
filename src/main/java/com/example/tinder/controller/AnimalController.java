@@ -1,5 +1,6 @@
 package com.example.tinder.controller;
 
+import com.example.tinder.model.BearerTokenWrapper;
 import com.example.tinder.model.entities.Animal;
 import com.example.tinder.model.entities.User;
 import com.example.tinder.model.frontObjects.AnimalData;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -29,6 +31,8 @@ public class AnimalController {
     final UserService userService;
     final BreedService breedService;
     final SpeciesService speciesService;
+    @Autowired
+    BearerTokenWrapper tokenWrapper;
     
     @Autowired
     public AnimalController(AnimalService animalService, UserService userService, BreedService breedService, SpeciesService speciesService) {
@@ -39,10 +43,12 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/animals/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllAnimals(@PathVariable Long userId) {
+    public ResponseEntity<?> getAllAnimals(@RequestHeader("Authorization") String bearerToken, @PathVariable Long userId) {
         log.info("AnimalController: list animals");
         Optional<User> user = userService.getById(userId);
         if (user.isPresent()) {
+            if(!Objects.equals(tokenWrapper.getUsername(bearerToken), user.get().getUsername()))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error");
             List<Animal> animals = animalService.getAllByUser(user.get());
             List<AnimalData> response = new ArrayList<>();
             for (var animal : animals) {
@@ -58,10 +64,12 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/animal/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getSelectedAnimal(@PathVariable Long userId) {
+    public ResponseEntity<?> getSelectedAnimal(@RequestHeader("Authorization") String bearerToken, @PathVariable Long userId) {
         log.info("AnimalController: selected animal");
         Optional<User> user = userService.getById(userId);
         if (user.isPresent()) {
+            if(!Objects.equals(tokenWrapper.getUsername(bearerToken), user.get().getUsername()))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error");
             Animal animal = animalService.getSelectedAnimalOfUser(user.get());
             return ResponseEntity.ok( new AnimalData(animal));
         } else {
@@ -84,7 +92,7 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/save_animal", method = RequestMethod.POST)
-    public ResponseEntity<AnimalData> save(@RequestBody AnimalData animalData)
+    public ResponseEntity<AnimalData> save(@RequestHeader("Authorization") String bearerToken, @RequestBody AnimalData animalData)
     {
         log.info("AnimalController: save animal");
         if(userService.getById(animalData.getUserId()).isPresent()) {
