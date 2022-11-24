@@ -24,6 +24,6 @@ public class BreedServiceImpl implements BreedService {
 
     @Override
     public Breed getById(Long id) {
-        return breedRepository.getById(id);
+        return breedRepository.findById(id).get();
     }
 }

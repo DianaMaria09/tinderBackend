@@ -50,7 +50,7 @@ public class AnimalServiceImpl implements AnimalService {
 
         Predicate<Animal> filterByAll = isOfBreed.and(isOfSpecies);
 
-        return (List<Animal>) animalRepository.findAll().stream().filter(filterByAll);
+        return animalRepository.findAll().stream().filter(filterByAll).collect(Collectors.toList());
     }
 
     public List<Animal> getAllByUser (User user) {
@@ -92,7 +92,7 @@ public class AnimalServiceImpl implements AnimalService {
 
         var allAnimalsBySpecies = getAllBySpecies(animal.getSpecies());
 
-        return (List<Animal>) allAnimalsBySpecies.stream().filter(areNotInPreviousMatch);
+        return allAnimalsBySpecies.stream().filter(areNotInPreviousMatch).collect(Collectors.toList());
     }
 
     @Override

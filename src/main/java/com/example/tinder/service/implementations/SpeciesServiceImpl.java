@@ -23,6 +23,6 @@ public class SpeciesServiceImpl implements SpeciesService {
 
     @Override
     public Species getById(Long id) {
-        return speciesRepository.getById(id);
+        return speciesRepository.findById(id).get();
     }
 }
