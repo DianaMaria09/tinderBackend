@@ -15,6 +15,7 @@ import java.util.Objects;
 @Service
 public class MatchingServiceImpl implements MatchingService {
     private AnimalRepository animalRepository;
+    private Integer MAX_YEAR_DIFFERENCE_BETWEEN_ANIMALS = 3;
 
     @Autowired
     public MatchingServiceImpl(AnimalRepository animalRepository){
@@ -25,9 +26,9 @@ public class MatchingServiceImpl implements MatchingService {
 
         List<Animal> possibleMatches = new ArrayList<>();
         for(Animal animalFromPossibleMatches : animalRepository.findAll()){
-            if((animalFromPossibleMatches.getSpecies() == animal.getSpecies()
+            if ((animalFromPossibleMatches.getSpecies() == animal.getSpecies()
                     || animalFromPossibleMatches.getBreed() == animal.getBreed())
-                    && Math.abs(ChronoUnit.YEARS.between(animalFromPossibleMatches.getBirthday(), animal.getBirthday())) < 3
+                    && Math.abs(ChronoUnit.YEARS.between(animalFromPossibleMatches.getBirthday(), animal.getBirthday())) < MAX_YEAR_DIFFERENCE_BETWEEN_ANIMALS
                     && !Objects.equals(animalFromPossibleMatches.getId(), animal.getId())){
                 possibleMatches.add(animalFromPossibleMatches);
             }
