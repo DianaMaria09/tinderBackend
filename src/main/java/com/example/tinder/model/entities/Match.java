@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Match {
+public class Match implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;

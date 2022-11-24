@@ -121,7 +121,14 @@ public class AnimalServiceImpl implements AnimalService {
         animalRepository.saveAll(allAnimalsOfUser);
         return retAnimal;
     }
-    
+
+    @Override
+    public Animal findById(Long animalId) {
+        if(animalRepository.findById(animalId).isPresent())
+            return animalRepository.findById(animalId).get();
+        return null;
+    }
+
     public Animal deleteAnimal(Long id,User user) {
         animalRepository.deleteById(id);
         var allAnimals = getAllByUser(user);

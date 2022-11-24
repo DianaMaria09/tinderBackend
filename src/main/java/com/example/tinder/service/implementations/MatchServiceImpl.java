@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -21,6 +22,12 @@ public class MatchServiceImpl implements MatchService {
 
     public List<Match> getAll(){
         return matchRepository.findAll();
+    }
+
+    public List<Match> getMatchForAnimal(Animal animal){
+        return matchRepository.findAll().stream()
+                .filter(match -> ((match.getAnimal1() == animal || match.getAnimal2() == animal)
+                && (match.getLikeAnimal1() && match.getLikeAnimal2()))).collect(Collectors.toList());
     }
 
     private Match getMatchBetween(Animal animal1, Animal animal2) {

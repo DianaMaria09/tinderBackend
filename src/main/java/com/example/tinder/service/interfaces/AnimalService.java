@@ -28,4 +28,6 @@ public interface AnimalService {
     Animal addAnimal(Optional<Long> id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed);
     Animal deleteAnimal(Long id, User user);
     Animal selectAnimalForUserById(Long id, User user);
+
+    Animal findById(Long animalId);
 }
