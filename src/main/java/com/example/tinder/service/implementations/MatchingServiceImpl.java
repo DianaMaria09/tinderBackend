@@ -25,6 +25,8 @@ public class MatchingServiceImpl implements MatchingService {
     public List<Animal> getAllPossibleMatches(Animal animal){
 
         List<Animal> possibleMatches = new ArrayList<>();
+        if(animal == null)
+            return possibleMatches;
         for(Animal animalFromPossibleMatches : animalRepository.findAll()){
             if ((animalFromPossibleMatches.getSpecies() == animal.getSpecies()
                     || animalFromPossibleMatches.getBreed() == animal.getBreed())
