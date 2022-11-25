@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MatchService {
     List<Match> getAll();
-    void addMatch(Animal animal1, Animal animal2);
+    void addMatch(Animal animal1, Animal animal2, boolean like);
     List<Match> getMatchForAnimal(Animal animal);
 }

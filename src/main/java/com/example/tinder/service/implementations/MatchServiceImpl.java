@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,17 +44,22 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public void addMatch(Animal animalWhoLiked, Animal animalLikedBy) {
+    public void addMatch(Animal animalWhoLiked, Animal animalLikedBy, boolean like) {
         var match = getMatchBetween(animalWhoLiked, animalLikedBy);
 
-        if (match != null) {
-            match.setLikeAnimal1(true);
-            match.setLikeAnimal2(true);
-            matchRepository.save(match);
-        } else {
+        if (match == null) {
             var newMatch = new Match(animalWhoLiked, animalLikedBy);
-            newMatch.setLikeAnimal1(true);
+            if(Objects.equals(newMatch.getAnimal1().getId(), animalWhoLiked.getId()))
+                newMatch.setLikeAnimal1(like);
+            else
+                newMatch.setLikeAnimal2(like);
             matchRepository.save(newMatch);
+        } else {
+            if(Objects.equals(match.getAnimal1().getId(), animalWhoLiked.getId()))
+                match.setLikeAnimal1(like);
+            else
+                match.setLikeAnimal2(like);
+            matchRepository.save(match);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.tinder.controller;
+package com.example.tinder.model.payload;
 
 import lombok.Getter;
 import lombok.Setter;

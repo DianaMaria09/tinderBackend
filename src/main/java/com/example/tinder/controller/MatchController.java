@@ -3,6 +3,7 @@ package com.example.tinder.controller;
 import com.example.tinder.model.entities.Animal;
 import com.example.tinder.model.entities.Match;
 import com.example.tinder.model.frontObjects.AnimalData;
+import com.example.tinder.model.payload.MatchRequest;
 import com.example.tinder.service.interfaces.AnimalService;
 import com.example.tinder.service.interfaces.MatchService;
 import lombok.AccessLevel;
@@ -12,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +47,15 @@ public class MatchController {
             }
         }
             return ResponseEntity.status(HttpStatus.OK).body(animalsFromMatches);
+    }
+
+    @PostMapping(value = "/like/animals")
+    public ResponseEntity<?> likeAnimal(@RequestBody MatchRequest matchRequest){
+        Animal animal1 = animalService.findById(matchRequest.getIdAnimal1());
+        Animal animal2 = animalService.findById(matchRequest.getIdAnimal2());
+        if(animal1 == null || animal2 == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One of the two animals is not existing");
+        matchService.addMatch(animal1, animal2, matchRequest.isLike());
+        return ResponseEntity.status(HttpStatus.OK).body("Match saved");
     }
 }
