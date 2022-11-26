@@ -20,6 +20,7 @@ public class AnimalData {
     Long speciesId;
     Long breedId;
     Boolean selected;
+    String url;
     
     public AnimalData(){}
     
@@ -32,5 +33,8 @@ public class AnimalData {
         speciesId = animal.getSpecies().getId();
         breedId = animal.getBreed().getId();
         selected = animal.getSelected();
+        if(animal.getImage()!=null) {
+            url = new String(animal.getImage());
+        }
     }
 }

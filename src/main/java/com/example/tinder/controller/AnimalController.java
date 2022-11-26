@@ -63,7 +63,8 @@ public class AnimalController {
         Optional<User> user = userService.getById(userId);
         if (user.isPresent()) {
             Animal animal = animalService.getSelectedAnimalOfUser(user.get());
-            return ResponseEntity.ok( new AnimalData(animal));
+            var response = new AnimalData(animal);
+            return ResponseEntity.ok( response );
         } else {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -88,7 +89,7 @@ public class AnimalController {
     {
         log.info("AnimalController: save animal");
         if(userService.getById(animalData.getUserId()).isPresent()) {
-            var animal = animalService.addAnimal(Optional.empty(), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+            var animal = animalService.addAnimal(Optional.empty(), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()), animalData.getUrl());
             return ResponseEntity.status(HttpStatus.OK).body(new AnimalData(animal));
         }else {
             return null;
@@ -100,7 +101,7 @@ public class AnimalController {
     {
         log.info("AnimalController: edit animal");
         if(userService.getById(animalData.getUserId()).isPresent()) {
-            var animal =  animalService.addAnimal(Optional.ofNullable(animalData.getId()), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()));
+            var animal =  animalService.addAnimal(Optional.ofNullable(animalData.getId()), animalData.getName(), animalData.getBirthday(), animalData.getGender(), userService.getById(animalData.getUserId()).get(), speciesService.getById(animalData.getSpeciesId()), breedService.getById(animalData.getBreedId()), animalData.getUrl());
             return ResponseEntity.status(HttpStatus.OK).body(new AnimalData(animal));
         }else {
             return null;

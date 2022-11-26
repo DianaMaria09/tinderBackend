@@ -54,6 +54,7 @@ public class MatchingServiceImpl implements MatchingService {
                 }
             }
             if (animalFromPossibleMatches.getSpecies() == animal.getSpecies()
+                    && !animalFromPossibleMatches.getGender().equals(animal.getGender())
                     && Math.abs(ChronoUnit.YEARS.between(animalFromPossibleMatches.getBirthday(), animal.getBirthday())) < MAX_YEAR_DIFFERENCE_BETWEEN_ANIMALS
                     && !Objects.equals(animalFromPossibleMatches.getId(), animal.getId())
                     && (!exists || (like == null && anotherLike))){

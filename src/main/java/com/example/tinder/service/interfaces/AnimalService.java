@@ -25,7 +25,7 @@ public interface AnimalService {
      */
     List<Animal> getAllToDisplayForAnimal(Animal animal);
 
-    Animal addAnimal(Optional<Long> id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed);
+    Animal addAnimal(Optional<Long> id, String name, LocalDate birthday, String gender, User user, Species species, Breed breed, String url);
     Animal deleteAnimal(Long id, User user);
     Animal selectAnimalForUserById(Long id, User user);
 

@@ -34,8 +34,10 @@ public class Animal implements Serializable {
     @JoinColumn(name = "breed")
     Breed breed;
     Boolean selected;
+    @Lob
+    byte[] image;
 
-    public Animal(String name, LocalDate birthday, String gender, User user, Species species, Breed breed, Boolean selected) {
+    public Animal(String name, LocalDate birthday, String gender, User user, Species species, Breed breed, Boolean selected, byte[] image) {
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
@@ -43,6 +45,7 @@ public class Animal implements Serializable {
         this.species = species;
         this.breed = breed;
         this.selected = selected;
+        this.image = image;
     }
 
 }
