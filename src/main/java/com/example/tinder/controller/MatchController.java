@@ -56,6 +56,6 @@ public class MatchController {
         if(animal1 == null || animal2 == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One of the two animals is not existing");
         matchService.addMatch(animal1, animal2, matchRequest.isLike());
-        return ResponseEntity.status(HttpStatus.OK).body("Match saved");
+        return ResponseEntity.status(HttpStatus.OK).body("");
     }
 }
