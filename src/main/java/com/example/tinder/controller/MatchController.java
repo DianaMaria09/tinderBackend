@@ -58,4 +58,14 @@ public class MatchController {
         matchService.addMatch(animal1, animal2, matchRequest.isLike());
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
+    
+    @RequestMapping(value = "/delete_match/{id1}/{id2}")
+    public ResponseEntity<?> deleteMatch(@PathVariable Long id1, @PathVariable Long id2){
+        Animal animal1 = animalService.findById(id1);
+        Animal animal2 = animalService.findById(id2);
+        if(animal1 == null || animal2 == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One of the two animals is not existing");
+        matchService.deleteMatch(animal1, animal2);
+        return ResponseEntity.status(HttpStatus.OK).body("");
+    }
 }

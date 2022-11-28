@@ -19,16 +19,17 @@ public class Match implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_animal1")
     Animal animal1;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_animal2")
     Animal animal2;
     @Value("${likeAnimal1:#{null}}")
     Boolean likeAnimal1;
     @Value("${likeAnimal2:#{null}}")
     Boolean likeAnimal2;
+    Boolean deleted = false;
 
     public Match() {
 

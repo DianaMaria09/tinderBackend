@@ -28,7 +28,7 @@ public class MatchServiceImpl implements MatchService {
     public List<Match> getMatchForAnimal(Animal animal){
         return matchRepository.findAll().stream()
                 .filter(match -> ((match.getAnimal1() == animal || match.getAnimal2() == animal)
-                && (match.getLikeAnimal1() && match.getLikeAnimal2()))).collect(Collectors.toList());
+                && (match.getLikeAnimal1() && match.getLikeAnimal2()) && (!match.getDeleted()))).collect(Collectors.toList());
     }
 
     private Match getMatchBetween(Animal animal1, Animal animal2) {
@@ -61,5 +61,12 @@ public class MatchServiceImpl implements MatchService {
                 match.setLikeAnimal2(like);
             matchRepository.save(match);
         }
+    }
+    
+    @Override
+    public void deleteMatch(Animal animal1, Animal animal2) {
+        var match = getMatchBetween(animal1, animal2);
+        match.setDeleted(true);
+        matchRepository.save(match);
     }
 }
