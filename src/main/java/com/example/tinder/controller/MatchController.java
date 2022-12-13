@@ -40,10 +40,14 @@ public class MatchController {
         List<AnimalData> animalsFromMatches = new ArrayList<>();
         for(Match match : matches){
             if(match.getAnimal2() != animal){
-                animalsFromMatches.add(new AnimalData(match.getAnimal2()));
+                var a = new AnimalData(match.getAnimal2());
+                a.setMatchId(match.getId());
+                animalsFromMatches.add(a);
             }
             else if(match.getAnimal1() != animal){
-                animalsFromMatches.add(new AnimalData(match.getAnimal1()));
+                var a = new AnimalData(match.getAnimal1());
+                a.setMatchId(match.getId());
+                animalsFromMatches.add(a);
             }
         }
             return ResponseEntity.status(HttpStatus.OK).body(animalsFromMatches);

@@ -69,4 +69,9 @@ public class MatchServiceImpl implements MatchService {
         match.setDeleted(true);
         matchRepository.save(match);
     }
+    
+    @Override
+    public Match getMatchById(Long id){
+        return matchRepository.findById(id).get();
+    }
 }

@@ -22,6 +22,8 @@ public class AnimalData {
     Boolean selected;
     String url;
     
+    Long matchId;
+    
     public AnimalData(){}
     
     public AnimalData (Animal animal){
