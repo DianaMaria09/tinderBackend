@@ -1,9 +1,11 @@
 package com.example.tinder.controller;
 
 import com.example.tinder.model.frontObjects.ChatData;
+import com.example.tinder.model.payload.SendMessageRequest;
 import com.example.tinder.service.interfaces.AnimalService;
 import com.example.tinder.service.interfaces.ChatService;
 import com.example.tinder.service.interfaces.MatchService;
+import com.example.tinder.service.interfaces.MessageService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
@@ -23,13 +25,15 @@ public class ChatController {
     final AnimalService animalService;
     final ChatService chatService;
     final MatchService matchService;
+    final MessageService messageService;
     
     @Autowired
-    public ChatController(AnimalService animalService, ChatService chatService, MatchService matchService){
+    public ChatController(AnimalService animalService, ChatService chatService, MatchService matchService, MessageService messageService){
     
         this.animalService = animalService;
         this.chatService = chatService;
         this.matchService = matchService;
+        this.messageService = messageService;
     }
     
     @RequestMapping(value = "create_chat/{matchId}", method = RequestMethod.GET)
@@ -52,11 +56,26 @@ public class ChatController {
                 secondAnimal = chat.getMatch().getAnimal2();
             }
             chData.setName(secondAnimal.getName());
-            if(secondAnimal.getId()!=null){
+            if(secondAnimal.getImage()!=null){
                 chData.setUrl(new String(secondAnimal.getImage()));
+            }
+           var message = messageService.getLastMessageForChat(chat.getId());
+            if(message != null){
+                chData.setLastMessage(message.getText());
             }
             response.add(chData);
         });
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(value = "send_message")
+    public ResponseEntity<?> sendMessage(@RequestBody SendMessageRequest messageRequest){
+        messageService.sendMessage(messageRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("");
+    }
+
+    @RequestMapping(value = "get_messages/{chat_id}")
+    public ResponseEntity<?> getMessagesForChat(@PathVariable Long chat_id){
+        return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessagesForChat(chat_id));
     }
 }
