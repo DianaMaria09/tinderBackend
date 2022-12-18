@@ -31,8 +31,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendMessage(SendMessageRequest sendMessageRequest) {
         var chat = chatRepository.findById(sendMessageRequest.getChatId()).get();
-        Animal from = new Animal();
-        Animal to = new Animal();
+        Animal from, to;
         var animal1 = chat.getMatch().getAnimal1();
         var animal2 = chat.getMatch().getAnimal2();
         var message = new Message();
@@ -42,6 +41,9 @@ public class MessageServiceImpl implements MessageService {
         if(animal1.getId() == sendMessageRequest.getAnimalId()){
             from = animal1;
             to = animal2;
+        } else {
+            from = animal2;
+            to = animal1;
         }
         message.setFromAnimal(from);
         message.setToAnimal(to);
@@ -52,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getMessagesForChat(Long id) {
         return messageRepository.findAll().stream()
                 .filter(message -> message.getChat().getId() == id)
-                .sorted(Comparator.comparing(Message::getDate).reversed())
+                .sorted(Comparator.comparing(Message::getDate))
                 .toList();
     }
 

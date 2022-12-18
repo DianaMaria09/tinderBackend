@@ -1,6 +1,7 @@
 package com.example.tinder.controller;
 
 import com.example.tinder.model.frontObjects.ChatData;
+import com.example.tinder.model.frontObjects.MessageData;
 import com.example.tinder.model.payload.SendMessageRequest;
 import com.example.tinder.service.interfaces.AnimalService;
 import com.example.tinder.service.interfaces.ChatService;
@@ -76,6 +77,11 @@ public class ChatController {
 
     @RequestMapping(value = "get_messages/{chat_id}")
     public ResponseEntity<?> getMessagesForChat(@PathVariable Long chat_id){
-        return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessagesForChat(chat_id));
+        var messages = messageService.getMessagesForChat(chat_id);
+        var response = new ArrayList<MessageData>();
+        for(var message: messages){
+            response.add(new MessageData(message));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
