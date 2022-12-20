@@ -69,7 +69,7 @@ public class ChatController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping(value = "send_message")
+    @PostMapping(value = "/send_message")
     public ResponseEntity<?> sendMessage(@RequestBody SendMessageRequest messageRequest){
         messageService.sendMessage(messageRequest);
         return ResponseEntity.status(HttpStatus.OK).body("");
