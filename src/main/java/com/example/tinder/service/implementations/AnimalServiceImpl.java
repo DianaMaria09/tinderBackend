@@ -5,13 +5,16 @@ import com.example.tinder.model.entities.Breed;
 import com.example.tinder.model.entities.Species;
 import com.example.tinder.model.entities.User;
 import com.example.tinder.repository.AnimalRepository;
+import com.example.tinder.repository.ChatRepository;
 import com.example.tinder.repository.MatchRepository;
+import com.example.tinder.repository.MessageRepository;
 import com.example.tinder.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,10 +23,15 @@ import java.util.stream.Collectors;
 public class AnimalServiceImpl implements AnimalService {
     AnimalRepository animalRepository;
     MatchRepository matchRepository;
+    ChatRepository chatRepository;
+    MessageRepository messageRepository;
 
     @Autowired
-    public AnimalServiceImpl(AnimalRepository animalRepository) {
+    public AnimalServiceImpl(AnimalRepository animalRepository, MatchRepository matchRepository, ChatRepository chatRepository, MessageRepository messageRepository) {
         this.animalRepository = animalRepository;
+        this.matchRepository = matchRepository;
+        this.chatRepository = chatRepository;
+        this.messageRepository = messageRepository;
     }
 
     public List<Animal> getAll () {
@@ -130,6 +138,24 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     public Animal deleteAnimal(Long id,User user) {
+        var matches = matchRepository.findAll();
+        for(var match : matches){
+            if(Objects.equals(match.getAnimal1().getId(), id) || Objects.equals(match.getAnimal2().getId(), id)){
+                var chats = chatRepository.findAll();
+                for(var chat : chats){
+                    if(Objects.equals(chat.getMatch().getId(), match.getId())){
+                        var messages = messageRepository.findAll();
+                        for(var message : messages){
+                            if(Objects.equals(message.getChat().getId(), chat.getId())){
+                                messageRepository.delete(message);
+                            }
+                        }
+                        chatRepository.delete(chat);
+                    }
+                }
+                matchRepository.delete(match);
+            }
+        }
         animalRepository.deleteById(id);
         var allAnimals = getAllByUser(user);
         var animal = allAnimals.get(0);
