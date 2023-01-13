@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -38,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
         message.setChat(chat);
         message.setDate(LocalDate.now());
         message.setText(sendMessageRequest.getMessage());
-        if(animal1.getId() == sendMessageRequest.getAnimalId()){
+        if(Objects.equals(animal1.getId(), sendMessageRequest.getAnimalId())){
             from = animal1;
             to = animal2;
         } else {
@@ -53,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> getMessagesForChat(Long id) {
         return messageRepository.findAll().stream()
-                .filter(message -> message.getChat().getId() == id)
+                .filter(message -> Objects.equals(message.getChat().getId(), id))
                 .sorted(Comparator.comparing(Message::getDate))
                 .toList();
     }
@@ -62,7 +63,7 @@ public class MessageServiceImpl implements MessageService {
     public Message getLastMessageForChat(Long id) {
         var messages = getMessagesForChat(id);
         if(!messages.isEmpty())
-            return getMessagesForChat(id).get(0);
+            return getMessagesForChat(id).get(messages.size() - 1);
         return null;
     }
 
