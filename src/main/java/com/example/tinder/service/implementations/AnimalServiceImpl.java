@@ -119,7 +119,7 @@ public class AnimalServiceImpl implements AnimalService {
         var allAnimalsOfUser = getAllByUser(user);
         Animal retAnimal = null;
         for(var animal: allAnimalsOfUser) {
-            if(animal.getId() == id){
+            if(Objects.equals(animal.getId(), id)){
                 animal.setSelected(true);
                 retAnimal = animal;
             } else {
